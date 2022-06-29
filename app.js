@@ -7,6 +7,9 @@ const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./errors/errorHandler');
 const userRouter = require('./routes/users');
+const movieRouter = require('./routes/movies');
+const auth = require('./middlewares/auth');
+const { pageNotFound } = require('./errors/pageNotFound');
 
 const app = express();
 
@@ -28,8 +31,8 @@ app.get('/crash-test', () => {
 });
 
 app.use('/', userRouter);
-// app.use('/', cardRouter);
-// app.use('*', auth, pageNotFound);
+app.use('/', movieRouter);
+app.use('*', auth, pageNotFound);
 
 app.use(errorLogger);
 
