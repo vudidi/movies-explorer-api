@@ -2,8 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
+const { limiter } = require('./utils/rateLimiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./errors/errorHandler');
 const userRouter = require('./routes/users');
@@ -15,9 +17,15 @@ const app = express();
 
 app.use(cors());
 
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+}));
+
+app.use(limiter);
+
 const { PORT = 3000 } = process.env;
 
-mongoose.connect('mongodb://localhost:27017/cinemaholicsdb');
+mongoose.connect('mongodb://localhost:27017/moviesdb');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
