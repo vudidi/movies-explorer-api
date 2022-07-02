@@ -6,11 +6,10 @@ const { ForbiddenError } = require('../errors/ForbiddenError');
 
 const getMovies = (req, res, next) => {
   const owner = req.user._id;
-  const favoriteMovies = [];
-  Movie.find({})
+
+  Movie.find({ owner })
     .then((movies) => {
-      movies.forEach((item) => item.owner.toString() === owner && favoriteMovies.push(item));
-      res.status(201).send({ favoriteMovies });
+      res.status(201).send({ movies });
     })
     .catch(() => {
       next(new ServerError('Произошла ошибка'));
@@ -72,7 +71,7 @@ const removeMovie = (req, res, next) => {
       if (item.owner.toString() !== req.user._id) {
         return next(new ForbiddenError('Нет доступа к удалению фильма'));
       }
-      return Movie.findByIdAndDelete(req.params._id).then(() => {
+      return item.remove(req.params._id).then(() => {
         res.status(200).send({ message: 'Фильм удален из избранного.' });
       });
     })
