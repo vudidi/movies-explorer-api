@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const auth = require('../middlewares/auth');
+const { emailRegex } = require('../utils/regEx');
 const {
   createUser,
   loginUser,
@@ -10,7 +11,7 @@ const {
 
 router.post('/signup', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
+    email: Joi.string().required().pattern(emailRegex),
     password: Joi.string().required(),
     name: Joi.string().required().min(2).max(30),
   }),
@@ -18,7 +19,7 @@ router.post('/signup', celebrate({
 
 router.post('/signin', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
+    email: Joi.string().required().pattern(emailRegex),
     password: Joi.string().required(),
   }),
 }), loginUser);
@@ -30,7 +31,7 @@ router.patch(
   auth,
   celebrate({
     body: Joi.object().keys({
-      email: Joi.string().required().email(),
+      email: Joi.string().required().pattern(emailRegex),
       name: Joi.string().required().min(2).max(30),
     }),
   }),
