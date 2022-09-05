@@ -6,7 +6,7 @@
 
 ## Запуск проекта
 
-`https://github.com/vudidi/movies-explorer-api.git` - клонировать репозиторий
+`git clone https://github.com/vudidi/movies-explorer-api.git` - клонировать репозиторий
 
 `npm install` - установить зависимости  
 `npm run start` - запустить сервер  
